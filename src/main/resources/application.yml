@@ -1,0 +1,11 @@
+server:
+  port: 9090
+
+jwt:
+  secret: "your-very-secure-secret-key-that-is-long-enough" # (?? ??? ???? ? ?)
+  expiration-ms: 3600000 # (1??)
+
+spring:
+  h2:
+    console:
+      enabled: true
