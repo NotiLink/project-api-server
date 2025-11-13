@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "2. 알림 키워드 (Keyword)", description = "로그인한 사용자의 키워드 관리 API")
+@Tag(name = "2. 알림 키워드 (Keyword)")
 @SecurityRequirement(name = "Bearer Authentication") // Swagger에서 인증이 필요함을 명시
 @RestController
 @RequestMapping("/api/keywords")
