@@ -7,14 +7,30 @@ jwt:
 
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
+    #driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:h2:mem:testdb
+    url: jdbc:mysql://52.65.222.90:3306/notification_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    #username: sa
+    #password:
+    username: root
+    password: Rlawnsgk1!
 
-  h2:
-    console:
-      enabled: true
+  jpa:
+    hibernate:
+      # update: 엔티티에 맞춰 테이블을 자동 생성/수정함
+      # validate: 엔티티와 테이블이 맞는지 검사만 함
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+
+
+#  h2:
+#    console:
+#      enabled: true
 
 logging:
   level:
