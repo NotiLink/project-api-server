@@ -1,5 +1,6 @@
 package com.chosun.demoversion.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,28 +10,36 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 비밀번호 암호화
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // csrf 비활성화 (api 서버이므로)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안함 (jwt 사용)
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/**").permitAll() // 1. /api/auth/** 경로는 모두 허용 (회원가입, 로그인)
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // 2. Swagger 경로는 모두 허용
-                        .requestMatchers(PathRequest.toH2Console()).permitAll() // H2 콘솔 접근 허용
-                        .anyRequest().authenticated() // 3. 그 외 모든 요청은 인증(로그인) 필요
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        .anyRequest().authenticated()
                 )
-                // 나중에 여기에 JwtAuthenticationFilter 추가 해야 함
+
+                // "UsernamePasswordAuthenticationFilter(기본 로그인)보다 먼저 우리 필터를 실행해라"라는 뜻
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())
                 );
         return http.build();
