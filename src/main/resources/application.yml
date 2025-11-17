@@ -16,4 +16,6 @@ spring:
     console:
       enabled: true
 
-
+logging:
+  level:
+    com.chosun.demoversion: DEBUG
