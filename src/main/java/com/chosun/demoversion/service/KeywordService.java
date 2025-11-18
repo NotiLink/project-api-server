@@ -26,11 +26,16 @@ public class KeywordService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
+        String keywordVal = request.getKeyword();
+        if(keywordVal != null && keywordVal.trim().isEmpty()) {
+            keywordVal = null;
+        }
+
         // 2. Keyword 엔티티를 생성
         Keyword keyword = Keyword.builder()
                 .user(user)
                 .targetUrl(request.getTargetUrl())
-                .keyword(request.getKeyword())
+                .keyword(keywordVal)
                 .isNotifyEnabled(request.isNotifyEnabled())
                 .notifyChannel(request.getNotifyChannel())
                 .build();
