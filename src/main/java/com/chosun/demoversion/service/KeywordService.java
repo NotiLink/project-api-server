@@ -31,6 +31,8 @@ public class KeywordService {
                 .user(user)
                 .targetUrl(request.getTargetUrl())
                 .keyword(request.getKeyword())
+                .isNotifyEnabled(request.isNotifyEnabled())
+                .notifyChannel(request.getNotifyChannel())
                 .build();
 
         // 3. 저장

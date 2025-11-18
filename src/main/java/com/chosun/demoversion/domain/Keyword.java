@@ -26,10 +26,18 @@ public class Keyword {
     @Column(nullable = false)
     private String keyword; // 찾을 키워드
 
+    @Column(nullable = false)
+    private boolean isNotifyEnabled; // 기본값 false 방지를 위해 빌더에서 꼭 넣기
+
+    @Column(length = 20)
+    private String notifyChannel; // email 등
+
     @Builder
-    public Keyword(User user, String targetUrl, String keyword) {
+    public Keyword(User user, String targetUrl, String keyword, boolean isNotifyEnabled, String notifyChannel) {
         this.user = user;
         this.targetUrl = targetUrl;
         this.keyword = keyword;
+        this.isNotifyEnabled = isNotifyEnabled;
+        this.notifyChannel = notifyChannel;
     }
 }
