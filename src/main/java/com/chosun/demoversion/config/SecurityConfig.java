@@ -33,7 +33,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )
 
