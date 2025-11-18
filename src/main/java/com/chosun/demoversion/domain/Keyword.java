@@ -23,7 +23,7 @@ public class Keyword {
     @Column(nullable = false)
     private String targetUrl; // 크롤링 할 URL
 
-    @Column(nullable = false)
+    @Column
     private String keyword; // 찾을 키워드
 
     @Column(nullable = false)
