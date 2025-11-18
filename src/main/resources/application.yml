@@ -10,7 +10,7 @@ spring:
     #driver-class-name: org.h2.Driver
     driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:h2:mem:testdb
-    url: jdbc:mysql://52.65.222.90:3306/notification_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/notification_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     #username: sa
     #password:
     username: root
