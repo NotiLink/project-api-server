@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,13 +37,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 // CORS 설정 활성화 (아래 corsConfigurationSource 빈을 사용)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
+
                 )
 
                 // "UsernamePasswordAuthenticationFilter(기본 로그인)보다 먼저 우리 필터를 실행해라"라는 뜻
@@ -57,18 +61,21 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // 프론트엔드 주소 허용 (Vercel 등)
-        // 개발 중엔 setAllowedOriginPatterns("*")가 편하지만, 배포 시엔 프론트 도메인만 넣는 게 정석
+        // 1. 모든 출처(Origin) 허용
+        // (보안상 배포 시엔 프론트 도메인만 넣는 게 좋지만, 에러 해결을 위해 와일드카드 사용)
         configuration.setAllowedOriginPatterns(List.of("*"));
 
-        // 허용할 HTTP 메서드 (DELETE, PATCH 포함 필수!)
+        // 2. 모든 HTTP 메서드 허용 (DELETE, PATCH가 여기에 꼭 있어야 합니다!)
         configuration.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "PATCH", "OPTIONS"));
 
-        // 허용할 헤더 (Authorization 등)
+        // 3. 모든 헤더 허용
         configuration.setAllowedHeaders(List.of("*"));
 
-        // 인증 정보(쿠키, 토큰) 포함 허용
+        // 4. 인증 정보(쿠키/토큰) 포함 허용
         configuration.setAllowCredentials(true);
+
+        // 5. (선택) 클라이언트가 응답 헤더를 읽을 수 있게 허용
+        configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
