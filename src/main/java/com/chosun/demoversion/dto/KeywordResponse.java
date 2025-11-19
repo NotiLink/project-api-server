@@ -1,6 +1,7 @@
 package com.chosun.demoversion.dto;
 
 import com.chosun.demoversion.domain.Keyword;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
@@ -8,7 +9,8 @@ public class KeywordResponse {
     private Long id;
     private String targetUrl;
     private String keyword;
-    private boolean isNotifyEnabled;
+    @JsonProperty("isNotifyEnabled")
+    private Boolean isNotifyEnabled;
     private String notifyChannel;
 
     public KeywordResponse(Keyword keyword) {
