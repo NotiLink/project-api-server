@@ -36,7 +36,7 @@ public class KeywordService {
                 .user(user)
                 .targetUrl(request.getTargetUrl())
                 .keyword(keywordVal)
-                .isNotifyEnabled(request.getNotifyEnabled())
+                .isNotifyEnabled(request.getIsNotifyEnabled())
                 .notifyChannel(request.getNotifyChannel())
                 .build();
 
