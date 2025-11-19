@@ -13,6 +13,6 @@ public class KeywordRequest {
     private String targetUrl;
     private String keyword;
     @JsonProperty("isNotifyEnabled")
-    private boolean isNotifyEnabled; // 알림 켜기/끄기
+    private Boolean notifyEnabled; // 알림 켜기/끄기
     private String notifyChannel; // 알림 채널
 }
