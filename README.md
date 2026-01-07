@@ -16,7 +16,7 @@
 ### 🔹 Database ERD
 
 **API Server, Crawler, Notifier** 3개의 서버가 데이터를 공유하는 모델입니다.
-*(여기에 ERD 이미지를 삽입하세요)*
+![Key-Catch ERD](img/erd.png)
 
 ## 🔥 Key Features (핵심 구현 내용)
 
