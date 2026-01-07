@@ -7,16 +7,16 @@
 
 ## 🏗️ System Architecture
 
-본 프로젝트는 **안정성(Stability)**과 **확장성(Scalability)**을 최우선으로 고려하여 **MSA (Microservices Architecture)** 구조를 채택했습니다.
+본 프로젝트는 **안정성(Stability)** 과 **확장성(Scalability)** 을 최우선으로 고려하여 **MSA (Microservices Architecture)** 구조를 채택했습니다.
 
 ### 🔹 Service Architecture
 
-*(여기에 아키텍처 다이어그램 이미지를 삽입하세요)*
+![System Architecture](./img/architecture.png)
 
 ### 🔹 Database ERD
 
 **API Server, Crawler, Notifier** 3개의 서버가 데이터를 공유하는 모델입니다.
-![Key-Catch ERD](img/erd.png)
+![Key-Catch ERD](./img/erd.png)
 
 ## 🔥 Key Features (핵심 구현 내용)
 
