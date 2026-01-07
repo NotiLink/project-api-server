@@ -15,6 +15,9 @@
 ### 🔹 Database ERD
 
 **API Server, Crawler, Notifier** 3개의 서버가 데이터를 공유하는 모델입니다.
+
+**User(사용자)** 를 중심으로 **Keyword(구독 정보)** 와 **Notification(알림 발송 내역)** 이 1:N 관계로 설계되어 있습니다.
+
 ![Key-Catch ERD](./img/erd.png)
 
 ## 🔥 Key Features (핵심 구현 내용)
@@ -23,7 +26,7 @@
 
 * **JWT 기반 Stateless 인증**:
 * `JwtAuthenticationFilter`를 커스텀 구현하여 요청 헤더의 토큰 유효성을 검증합니다.
-* DB 조회 없이 토큰 자체의 **서명(Signature)**만으로 인증을 처리하여 서버 부하를 최소화하고 성능을 최적화했습니다.
+* DB 조회 없이 토큰 자체의 **서명(Signature)** 만으로 인증을 처리하여 서버 부하를 최소화하고 성능을 최적화했습니다.
 
 
 * **HTTPS (SSL) 적용**:
@@ -45,30 +48,6 @@
 * **Boolean 필드 매핑 최적화**:
 * JSON 파싱 라이브러리(Jackson)와 Lombok 간의 boolean 필드명 충돌 이슈를 해결하기 위해 Wrapper Class(`Boolean`) 도입 및 `@JsonProperty`를 적용하여 데이터 손실을 방지했습니다.
 
-
-
-## 🚀 Trouble Shooting (문제 해결 경험)
-
-프로젝트 진행 중 발생한 기술적 이슈와 해결 과정입니다.
-
-### 1. JSON 필드 매핑 이슈 (데이터 초기화 현상)
-
-* **문제**: 프론트엔드에서 `isNotifyEnabled: true` 값을 보냈으나, 백엔드 DB에는 계속 `false`로 저장되는 현상 발생.
-* **원인**: Java의 `boolean` 원시 타입 변수명이 `is`로 시작할 때, Lombok이 생성하는 Getter(`isNotifyEnabled()`)와 Jackson 라이브러리의 파싱 규칙(`notifyEnabled`로 인식)이 엇갈려 매핑에 실패함.
-* **해결**:
-1. DTO 필드 타입을 `boolean` (Primitive)에서 **`Boolean` (Wrapper Class)**으로 변경하여 Lombok이 `getIsNotifyEnabled()`를 생성하도록 유도.
-2. `@JsonProperty("isNotifyEnabled")` 어노테이션을 명시하여 JSON 키값을 강제.
-
-
-* **결과**: 데이터 바인딩 성공률 100% 달성 및 프론트엔드와의 명확한 인터페이스 규약 확립.
-
-### 2. CORS 및 Preflight(OPTIONS) 403 에러
-
-* **문제**: 로그인(POST) 요청은 성공하나, 삭제(DELETE)나 수정(PATCH) 요청 시 **403 Forbidden** 에러 발생.
-* **원인**: Spring Security 필터 체인에서 브라우저가 보내는 예비 요청인 **Preflight(OPTIONS 메서드)**에 대한 허용 설정이 인증 필터(`authenticated()`)보다 늦게 처리되거나 누락되어 차단됨.
-* **해결**:
-1. `SecurityConfig`에서 `HttpMethod.OPTIONS`에 대한 요청을 필터 체인 최상단에 배치하여 `permitAll()`로 설정.
-2. `CorsConfigurationSource` 설정에 `DELETE`, `PATCH` 메서드를 명시적으로 허용 리스트에 추가.
 
 
 
