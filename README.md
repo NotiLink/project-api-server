@@ -11,15 +11,23 @@
 
 ## 🏗️ System Architecture
 
-본 프로젝트는 **안정성(Stability)** 과 **확장성(Scalability)** 을 최우선으로 고려하여 **MSA (Microservices Architecture)** 구조를 채택했습니다.
+본 프로젝트는 사용자 요청 처리와 백그라운드 작업을 분리하여
+서비스 안정성과 확장성을 확보하는 구조로 설계되었습니다.
+
+API Server는 사용자 인증, 키워드 관리, 알림 조회 등의
+비즈니스 로직을 담당하며,
+
+Crawler Server와 Notification Server는
+데이터 수집과 이메일 발송을 각각 독립적인 워커 프로세스로 처리합니다.
+
+이를 통해 크롤링 및 알림 작업이
+사용자 요청 처리 성능에 영향을 주지 않도록 설계했습니다.
+
+<br>
 
 ### 🔹 Service Architecture
 <img src="./img/architecture.png" width="800">
 
-* **API Server (This Repo)**: 사용자 인증/인가, 키워드 관리, 프론트엔드와의 통신 담당
-* **Crawler Server**: 데이터 수집 및 중복 제거
-* **Notification Server**: 이메일 발송 및 상태 관리
-* **MySQL (Shared DB)**: 3개의 서버가 데이터를 공유하며 비동기적으로 상태를 동기화
 
 <br>
 
